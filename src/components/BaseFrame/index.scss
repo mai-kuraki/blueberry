@@ -1,0 +1,36 @@
+@import '../../assets/styles/base.scss';
+.layout{
+  width: 100vw;
+  height: 100vh;
+  .sider{
+    width: 60px;
+    height: 100%;
+    background: #333;
+    border-right: none;
+    :global{
+      .ant-menu-item{
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px!important;
+        i{
+          color: #797979!important;
+        }
+      }
+      .ant-menu-item-selected{
+        background: none!important;
+        i{
+          color: #FFF!important;
+        }
+      }
+      .ant-menu-item::after{
+        left: 0px;
+        right: inherit;
+      }
+    }
+  }
+  .mainContent{
+    background: #1E1E1E;
+  }
+}

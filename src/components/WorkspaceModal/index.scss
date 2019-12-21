@@ -1,0 +1,22 @@
+@import '../../assets/styles/base.scss';
+.wrap{
+  width: 100%;
+  .btnWrap{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    .button{
+      border: none;
+      background: none;
+      color: $theme;
+      box-shadow: none;
+    }
+  }
+  .area{
+    background: #2f2f2f;
+    padding: 12px;
+    border-radius: 4px;
+    color: #fff;
+    min-height: 45px;
+  }
+}
