@@ -10,7 +10,7 @@ import {
 import {
   WIN_UPDATECONFIG,
   WIN_UPDATECONFIG_REPLY
-} from '../../../consts/event';
+} from '../../../app/consts/event';
 
 @connect(state => state.app)
 class WorkspaceModal extends Component {
@@ -26,18 +26,16 @@ class WorkspaceModal extends Component {
   componentDidMount() {
     const { onCancel } = this.props;
     ipcRenderer.on(WIN_UPDATECONFIG_REPLY, (e, arg) =>{
-      const { success, error } = arg;
-      if(success) {
-        message.success('设置成功');
-        this.props.dispatch({
-          type: 'app/readAppConfig'
-        })
-        onCancel();
-      }else {
+      const { error } = arg;
+      if(error) {
         message.error(error);
-        onCancel();
       }
+      onCancel();
     })
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners(WIN_UPDATECONFIG_REPLY);
   }
 
   setDirDialog = async () => {
@@ -57,7 +55,7 @@ class WorkspaceModal extends Component {
     const { path } = this.state;
     if(!path) return message.warn('请先选择目录');
     ipcRenderer.send(WIN_UPDATECONFIG, {
-      dir: path
+      workspace: path
     })
   }
 
@@ -76,14 +74,14 @@ class WorkspaceModal extends Component {
         closable={false}
         maskClosable={true}
         onCancel={onCancel}
-        onOk={() => this.onOk()}
+        onOk={this.onOk}
       >
         <div className={styles.wrap}>
           <div className={styles.area}>{path}</div>
           <div className={styles.btnWrap}>
             <Button 
               className={styles.button} 
-              onClick={() => {this.setDirDialog()}}
+              onClick={this.setDirDialog}
             >选择目录</Button>
           </div>
         </div>

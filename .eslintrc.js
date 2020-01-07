@@ -14,7 +14,8 @@ module.exports = {
     "react/prop-types": "off",
     "no-console": "off",
     "no-unreachable": "warn",
-    "require-yield": "warn"
+    "require-yield": "warn",
+    "css-identifierexpected": "off"
   },
   env: {
     "browser": true,

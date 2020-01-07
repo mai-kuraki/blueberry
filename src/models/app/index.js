@@ -2,23 +2,93 @@ import produce from 'immer';
 import fs from 'fs';
 import path from 'path';
 import Logger from '../../../app/utils/logger';
+import _ from 'lodash';
 
 export default {
   namespace: 'app',
   state: {
     appConfig: {
       workspace: ''
-    }
+    },
+    windows: [
+      {
+        title: 'mainpage',
+        id: '1'
+      },
+      {
+        title: 'mainpage2',
+        id: '2'
+      },
+      {
+        title: 'mainpage3',
+        id: '3'
+      }
+    ],
+    activeWindow: '1'
   },
   reducers: {
-    updatState(state, action) {
+    updateState(state, action) {
       const { payload: { fields } } = action;
-      const newState = produce(state, draft => {
+      return produce(state, draft => {
         Object.keys(fields).forEach(o => {
           draft[o] = fields[o];
         })
       })
-      return newState;
+    },
+    updateAppConfig(state, action) {
+      const { payload = {} } = action;
+      return produce(state, draft => {
+        Object.keys(payload).forEach(o => {
+          draft.appConfig[o] = payload[o];
+        })
+      })
+    },
+    newWindow(state, action) {
+      const { payload: { id, title } } = action;
+      return produce(state, draft => {
+        const { windows = [] } = draft;
+        if(_.find(windows, o => o.id === id)) return state;
+        windows.push({
+          title,
+          id
+        })
+        draft.windows = windows;
+        draft.activeWindow = id;
+      })
+    },
+    closeWindows(state, action) {
+      const { payload: { id = '', ids = [] } } = action;
+      let arr = [];
+      if(ids.length > 0) {
+        arr = ids;
+      }
+      if(id) {
+        arr.push(id);
+      }
+      return produce(state, draft => {
+        const { windows = [] } = draft;
+        let { activeWindow = '' } = draft;
+        const newWindows = _.filter(windows, o => arr.indexOf(o.id) === -1);
+        if(newWindows.length === 0) {
+          activeWindow = '';
+        }
+        if(arr.length > 1) {
+          activeWindow = newWindows[0].id;
+        }else {
+          const index = _.findIndex(windows, o => o.id === arr[0]);
+          if(index > -1) {
+            if(activeWindow === windows[index].id) {
+              if(index > 0) {
+                activeWindow = windows[index - 1].id
+              }else {
+                activeWindow = windows[index + 1].id
+              }
+            }
+          }
+        }
+        draft.activeWindow = activeWindow;
+        draft.windows = newWindows;
+      })
     }
   },
   effects: {
@@ -32,11 +102,9 @@ export default {
           try{
             const appConfig = JSON.parse(jsonStr);
             yield put({
-              type: 'updatState',
+              type: 'updateAppConfig',
               payload: {
-                fields: {
-                  appConfig
-                }
+                ...appConfig
               }
             })
           }catch(e) {

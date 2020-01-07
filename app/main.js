@@ -5,9 +5,10 @@ const {
 } = require('electron');
 const {
   WIN_UPDATECONFIG,
-  WIN_SEND_GLOBALCONFIG
-} = require('../consts/event');
-const updateConfig = require('./funcs/updateConfig');
+  WIN_SEND_GLOBALCONFIG,
+  WIN_COPY_TEMPLATE
+} = require('./consts/event');
+const funcs = require('./funcs');
 const addDevToolsExtension = require('./funcs/addDevToolsExtension');
 
 global.config =  {
@@ -49,4 +50,5 @@ app.on('activate', () => {
   if (mainWindow === null) createWindow();
 })
 
-ipcMain.on(WIN_UPDATECONFIG, updateConfig);
+ipcMain.on(WIN_UPDATECONFIG, funcs.updateConfig);
+ipcMain.on(WIN_COPY_TEMPLATE, funcs.copyTemplate)

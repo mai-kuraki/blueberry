@@ -1,10 +1,9 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import EmptyIcon from '../../assets/svgs/website.svg';
 import styles from './index.scss';
 
 @connect(state => state.app)
-class Home extends Component {
+class PageManage extends Component {
   constructor(props) {
     super(props);
   }
@@ -15,13 +14,11 @@ class Home extends Component {
 
   render() {
     return (
-      <div className={styles.emptyWrap} onClick={this.onClick}>
-        <div className={styles.emptyIcon}>
-          <img src={EmptyIcon}/>
-        </div>
+      <div style={{height: '2000px'}}>
+        page
       </div>
     )
   }
 }
 
-export default Home;
+export default PageManage;

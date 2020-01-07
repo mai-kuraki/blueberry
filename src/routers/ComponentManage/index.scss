@@ -1,0 +1,78 @@
+@import '../../assets/styles/base.scss';
+$hoverbg: #f0f0f0;
+.wrap{
+  position: relative;
+  .top{
+    position: absolute;
+    left: 0px;
+    top: -60px;
+  }
+}
+.title{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 22px;
+  color: #333;
+}
+.blockWrap{
+  width: 100%;
+  height: calc(100% - 40px - 60px);
+  .blockTitle{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: #333;
+    padding: 8px 4px;
+    cursor: pointer;
+    :global{
+      svg{
+        font-weight: bold;
+        color: #333;
+      }
+    }
+    .text{
+      margin-left: 4px;
+      color: #333;
+      font-weight: bold;
+    }
+  }
+  .blockContent{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .item{
+      width: 50%;
+      height: 80px;
+      padding: 8px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #333;
+      font-size: 13px;
+      transition: all 0.2s ease-in;
+      .icon{
+        color: $theme;
+        font-size: 24px;
+      }
+      .info{
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: 10px;
+        text-align: center;
+        .key{
+          // margin-right: 4px;
+          color: #b0b0b0;
+        }
+      }
+      &:hover{
+        background: $hoverbg;
+      }
+    }
+  }
+}

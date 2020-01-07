@@ -1,0 +1,33 @@
+@import '../../assets/styles/base.scss';
+.workspace{
+  color: #fff;
+  word-break: break-all;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  margin-top: 12px;
+}
+@keyframes :global(ant-progress-active-custom) {
+  0% {
+    width: 0;
+    opacity: 0.8;
+  }
+  20% {
+    width: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.6;
+  }
+}
+.progress{
+  :global{
+    .ant-progress-bg{
+      background: #ccc;
+      &:before{
+        background: $theme!important;
+        animation: ant-progress-active-custom 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite!important;
+      }
+    }
+  }  
+}

@@ -1,0 +1,94 @@
+@import '../../assets/styles/base.scss';
+$barheight: 50px;
+$hoverbg: #ececec;
+.header{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.drag{
+  flex: 1;
+  height: $barheight;
+  -webkit-app-region: drag;
+}
+.windowTab{
+  width: auto;
+  margin-top: 10px;
+  :global{
+    .ant-tabs-bar{
+      margin-bottom: 0px;
+      border-bottom: none;
+    }
+    .ant-tabs-nav-container{
+      margin-bottom: 0px;
+    }
+    .ant-tabs-tab{
+      background: #fff!important;
+      border-radius: 0px!important;
+      border: none!important;
+      margin-right: 0px!important;
+      color: #999!important;
+      position: relative!important;
+      padding: 0px 40px!important;
+      transition: none!important;
+      svg{
+        color: #333!important;
+      }
+      &:hover{
+        .anticon{
+          display: block;
+        }
+      }
+      .anticon{
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: #FFF!important;
+        display: none;
+      }
+    }
+    .ant-tabs-tab-active{
+      color: #333!important;
+      background: #f1f3f4!important;
+      font-weight: normal!important;
+      .anticon{
+        display: block;
+      }
+    }
+  }
+}
+.windowAction{
+  width: 150px;
+  height: $barheight;
+  display: flex;
+  align-items: center;
+  .close{
+    &:hover{
+      background: #ff4d4f;
+      color: #fff!important;
+    }
+  }
+  :global{
+    div{
+      width: 50px;
+      height: $barheight;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 200ms ease-in;
+      &:hover{
+        background: $hoverbg;
+      }
+      img{
+        display: block;
+        height: 16px;
+      }
+    }
+  }
+}
+.windowWrap{
+  height: calc(100% - 50px);
+  background: #f1f3f4;
+}

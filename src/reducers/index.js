@@ -1,5 +1,6 @@
 import * as sagaEffects from 'redux-saga/effects';
 import app from '../models/app';
+import page from '../models/page';
 const { takeEvery } = sagaEffects;
 const reducersObj = {};
 const effectsObj = {};
@@ -54,7 +55,8 @@ const run = item => {
 }
 
 run([
-  app
+  app,
+  page
 ]);
 
 function *rootEffect() {

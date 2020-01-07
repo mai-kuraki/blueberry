@@ -2,11 +2,50 @@
 .layout{
   width: 100vw;
   height: 100vh;
+  .widthDragBar{
+    position: absolute;
+    width: 4px;
+    height: 100%;
+    z-index: 1000;
+    top: 0px;
+    cursor: ew-resize;
+  }
+  .icon{
+    width: 24px;
+    height: 24px;
+    display: block;
+    opacity: 0.5;
+  }
+  .logo{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-app-region: drag;
+    :global{
+      img{
+        display: block;
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+  .siderWrap{
+    width: 100%;
+    height: 100%;
+    background: $theme;
+    display: flex;
+    flex-direction: column;
+  }
+  .drag{
+    flex: 1;
+    -webkit-app-region: drag;
+  }
   .sider{
     width: 60px;
-    height: 100%;
-    background: #333;
-    border-right: none;
+    background: $theme;
+    border: none;
     :global{
       .ant-menu-item{
         height: 60px;
@@ -14,23 +53,40 @@
         justify-content: center;
         align-items: center;
         padding: 0px!important;
-        i{
-          color: #797979!important;
+        &:active{
+          background: none!important;
         }
       }
       .ant-menu-item-selected{
         background: none!important;
-        i{
-          color: #FFF!important;
+        img{
+          opacity: 1!important;
         }
       }
       .ant-menu-item::after{
         left: 0px;
         right: inherit;
+        border-right: 3px solid #fff;
       }
     }
   }
+  .routeSider{
+    min-width: 240px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 0px 20px rgba(0, 0, 0, .16);
+    z-index: 1000;
+    .scroll{
+      height: calc(100% - 60px);
+    }
+    .thumbBlock{
+      background: rgba(0, 0, 0, 0.4);
+    }
+    .thumbHorBlock{
+      display: none;
+    }
+  }
   .mainContent{
-    background: #1E1E1E;
+    background: #fff;
   }
 }
