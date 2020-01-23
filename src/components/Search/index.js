@@ -27,6 +27,7 @@ class SearchComp extends Component{
             placeholder="查找"
             onSearch={value => console.log(value)}
             style={{ width: '90%' }}
+            allowClear
           />
         </div>
         {

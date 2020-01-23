@@ -1,5 +1,11 @@
 export default [
   {
+    key: 'commonlyused',
+    groupName: '常用组件',
+    item: [
+    ]
+  },
+  {
     key: 'common',
     groupName: '通用',
     item: [
@@ -121,4 +127,54 @@ export default [
       }
     ]
   },
+  {
+    key: 'datashow',
+    groupName: '数据展示',
+    item: [
+      {
+        key: 'Avatar',
+        name: '头像'
+      },
+      {
+        key: 'Badge',
+        name: '徽标数'
+      },
+      {
+        key: 'Comment',
+        name: '评论'
+      },
+      {
+        key: 'Collapse',
+        name: '折叠板'
+      },
+      {
+        key: 'Carousel',
+        name: '走马灯'
+      },
+      {
+        key: 'Card',
+        name: '卡片'
+      },
+      {
+        key: 'Calendar',
+        name: '日历'
+      },
+      {
+        key: 'Description',
+        name: '描述列表'
+      },
+      {
+        key: 'Empty',
+        name: '空状态'
+      },
+      {
+        key: 'List',
+        name: '列表'
+      },
+      {
+        key: 'Popover',
+        name: '气泡卡片'
+      }
+    ]
+  }
 ]
