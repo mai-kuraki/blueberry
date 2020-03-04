@@ -1,0 +1,31 @@
+.dirTree{
+  :global{
+    .ant-tree-node-selected{
+      color: rgba(0, 0, 0, 0.65)!important;
+    }
+    .ant-tree-indent{
+      width: 8px;
+    }
+    .ant-tree-switcher{
+      width: 12px!important;
+      padding-left: 5px!important;
+      color: rgba(0, 0, 0, 0.65)!important;
+    }
+    .ant-tree-treenode:hover{
+      &:before{
+        background: #f5f5f5!important;
+      }
+    }
+    .ant-tree-treenode-selected:before{
+      background: rgba(24, 144, 255, .18)!important;
+    }
+    .ant-tree-treenode-selected:hover{
+      &:before{
+        background: rgba(24, 144, 255, .18)!important;
+      }
+    }
+    .ant-tree-title{
+      font-size: 14px!important;
+    }
+  }
+}

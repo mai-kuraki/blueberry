@@ -10,6 +10,7 @@ export default {
     appConfig: {
       workspace: ''
     },
+    projectDir: [],
     windows: [
       {
         title: 'mainpage',

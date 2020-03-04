@@ -6,7 +6,9 @@ const {
 const {
   WIN_UPDATECONFIG,
   WIN_SEND_GLOBALCONFIG,
-  WIN_COPY_TEMPLATE
+  WIN_COPY_TEMPLATE,
+  WIN_OPEN_DEV,
+  WIN_SCAN_PROJECT
 } = require('./consts/event');
 const funcs = require('./funcs');
 const addDevToolsExtension = require('./funcs/addDevToolsExtension');
@@ -26,8 +28,8 @@ function createWindow () {
       devTools: true,
       nodeIntegration: true
     }
-  })
-  mainWindow.webContents.openDevTools();
+  });
+  global.mainWindow = mainWindow;
   mainWindow.loadURL('http://127.0.0.1:3000');
   mainWindow.on('closed', function () {
     mainWindow = null;
@@ -37,6 +39,7 @@ function createWindow () {
       __baseDir: __dirname
     })
   })
+  mainWindow.webContents.openDevTools();
   addDevToolsExtension();
 }
 
@@ -51,4 +54,6 @@ app.on('activate', () => {
 })
 
 ipcMain.on(WIN_UPDATECONFIG, funcs.updateConfig);
-ipcMain.on(WIN_COPY_TEMPLATE, funcs.copyTemplate)
+ipcMain.on(WIN_COPY_TEMPLATE, funcs.copyTemplate);
+ipcMain.on(WIN_OPEN_DEV, funcs.openDev);
+ipcMain.on(WIN_SCAN_PROJECT, funcs.scanProject);

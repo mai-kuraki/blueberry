@@ -41,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: [ 'style-loader', 'css-loader?modules', 'sass-loader' ]
+        loader: [ 'file-loader', 'style-loader', 'css-loader?modules', 'sass-loader' ]
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -53,6 +53,13 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(ttf|eot|woff|woff2)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name].[ext]',
+        }
       }
     ],
   },

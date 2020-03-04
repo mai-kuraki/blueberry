@@ -2,9 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const Logger = require('../utils/logger');
 const copydir = require('copy-dir');
+const Scan = require('../utils/scan');
 const {
   WIN_UPDATECONFIG_REPLY,
-  WIN_COPY_TEMPLATE_REPLY
+  WIN_COPY_TEMPLATE_REPLY,
+  WIN_SCAN_PROJECT_REPLY
 } = require('../consts/event');
 
 module.exports = {
@@ -51,5 +53,17 @@ module.exports = {
     e.reply(WIN_COPY_TEMPLATE_REPLY, {
       success: true,
     });
+  },
+  openDev: () => {
+    const { mainWindow } = global;
+    if(!mainWindow) return;
+    mainWindow.webContents.openDevTools();
+  },
+  scanProject: (e, arg) => {
+    const { path } = arg;
+    const dirs = Scan.do('D:/workspace/demo');
+    e.reply(WIN_SCAN_PROJECT_REPLY, {
+      data: dirs || [] 
+    })
   }
 };

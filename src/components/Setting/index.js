@@ -4,12 +4,20 @@ import styles from './index.scss';
 import { menusConfig } from '../../configs/settings';
 import WorkspaceModal from '../WorkspaceModal';
 import NewProjectModal from '../NewProjectModal';
+import { ipcRenderer } from 'electron';
 import {
   Menu, 
   Dropdown,
-  message,
-  Icon
+  message
 } from 'antd';
+import {
+  SettingOutlined
+} from '@ant-design/icons';
+import {
+  WIN_OPEN_DEV,
+  WIN_SCAN_PROJECT,
+  WIN_SCAN_PROJECT_REPLY
+} from '../../../app/consts/event';
 const {
   SubMenu
 } = Menu;
@@ -22,6 +30,28 @@ class Setting extends Component{
       workspaceModal: false,
       newProjectModal: false
     }
+  }
+
+  componentDidMount() {
+    ipcRenderer.on(WIN_SCAN_PROJECT_REPLY, (e, arg) => {
+      const { data } = arg;
+     if(data && data.length > 0) {
+       const dir = data[0].children;
+       console.log(dir)
+       this.props.dispatch({
+        type: 'app/updateState',
+        payload: {
+          fields: {
+            projectDir: dir
+          }
+        }
+       })
+     }
+    })
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners(WIN_SCAN_PROJECT_REPLY);
   }
 
   onWorkspaceOpen = () => {
@@ -51,15 +81,27 @@ class Setting extends Component{
     })
   }
 
+  onOpenDev = () => {
+    ipcRenderer.send(WIN_OPEN_DEV);
+  }
+
+  onOpenProject = () => {
+    ipcRenderer.send(WIN_SCAN_PROJECT, {});
+  }
+
   handleMenuClick = key => {
     switch(key) {
       case 'newProject':
         this.onNewProjectOpen();
         break;
       case 'openProject':
+        this.onOpenProject();
         break;
       case 'workSpace':
         this.onWorkspaceOpen();
+        break;
+      case 'openDev':
+        this.onOpenDev();
         break;
       default:
         return;
@@ -119,7 +161,7 @@ class Setting extends Component{
         }
         <div tabIndex={-1} className={styles.btn}>
           <Dropdown overlay={this.getMenuJSX(menusConfig)} trigger={['click']}>
-            <Icon type="setting" style={{color: '#fff', fontSize: '26px'}} />
+            <SettingOutlined style={{color: '#fff', fontSize: '26px'}}/>
           </Dropdown>
         </div>
       </Fragment>

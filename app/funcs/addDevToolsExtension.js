@@ -4,7 +4,7 @@ const { BrowserWindow } = require('electron');
 
 module.exports = () => {
   const { __baseDir } = global.config;
-  if(!fs.existsSync(path.join(__baseDir, 'settings/dev.json'))) {
+  if(fs.existsSync(path.join(__baseDir, 'settings/dev.json'))) {
     const data = fs.readFileSync(path.join(__baseDir, 'settings/dev.json'));
     if(data) {
       const jsonStr = data.toString();

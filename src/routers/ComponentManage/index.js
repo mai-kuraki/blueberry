@@ -3,8 +3,10 @@ import config from '../../configs/comps';
 import styles from './index.scss';
 import _ from 'lodash';
 import {
-  Icon
-} from 'antd';
+  CaretDownOutlined,
+  CaretUpOutlined,
+  ExperimentTwoTone
+} from '@ant-design/icons';
 
 class ComponentManage extends Component {
   constructor(props) {
@@ -37,13 +39,18 @@ class ComponentManage extends Component {
                     config
                   })
                 }}>
-                  <Icon type={o.open?'caret-down':'caret-right'} style={{fontSize: '10px'}} /><span className={styles.text}>{o.groupName}</span>
+                  {
+                    o.open?
+                    <CaretDownOutlined  style={{fontSize: '10px'}}/>:
+                    <CaretUpOutlined  style={{fontSize: '10px'}}/>
+                  }
+                  <span className={styles.text}>{o.groupName}</span>
                 </div>
                 <div className={`${styles.blockContent} ${o.open?styles.blockContentOpen:''}`}>
                   {
                     (o.item || []).map(s => {
                       return <div key={s.key} className={styles.item}>
-                         <Icon type="block" className={styles.icon} />
+                         <ExperimentTwoTone className={styles.icon} />
                         <div className={styles.info}><span className={styles.key}>{s.name}</span></div>
                       </div>
                     })

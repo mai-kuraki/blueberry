@@ -26,15 +26,18 @@ const {
 class BaseFrame extends Component {
   constructor(props) {
     super(props);
-    const path = window.location.pathname;
-    const arr = path.split('/');
-    const activePath = arr[1] || 'manage';
     this.state = {
-      activePath,
+      activePath: this.getActivePath(),
       position: 260,
       dragStart: false,
       isScroll: false
     }
+  }
+
+  getActivePath = (path = window.location.pathname) => {
+    const arr = path.split('/');
+    const activePath = arr[1] || 'pageManage';
+    return activePath;
   }
 
   componentDidMount() {
@@ -50,6 +53,9 @@ class BaseFrame extends Component {
   route = patch => {
     const { history } = this.props;
     history.push(`/${patch}`);
+    this.setState({
+      activePath: this.getActivePath(`/${patch}`)
+    })
   }
 
   dragMouseDown = e => {
@@ -126,7 +132,7 @@ class BaseFrame extends Component {
             </div>
             <Menu
               mode="inline"
-              defaultSelectedKeys={activePath}
+              selectedKeys={activePath}
               className={styles.sider}
             >
               {

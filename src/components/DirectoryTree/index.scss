@@ -1,0 +1,34 @@
+.treeNode{
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  .treeSwitch{
+    font-size: 12px;
+    padding-left: 8px;
+    width: 20px;
+  }
+  .indent{
+    width: 8px;
+  }
+  .indent2{
+    width: 20px;
+  }
+  .treeContentWrap{
+    width: calc(100% - 30px);
+    display: flex;
+    align-items: center;
+    .treeIcon{
+      width: 24px;
+      text-align: center;
+    }
+    .treeTitle{
+      width: calc(100% - 30px);
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+}

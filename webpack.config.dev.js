@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: [ 'style-loader', 'css-loader' ],
+        loader: [ 'file-loader', 'style-loader', 'css-loader' ],
       },
       {
         test: /\.less$/,
@@ -58,6 +58,13 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(ttf|eot|woff|woff2)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name].[ext]',
+        }
       }
     ],
   },

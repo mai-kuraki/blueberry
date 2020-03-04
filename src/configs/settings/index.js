@@ -8,6 +8,10 @@ export const menusConfig = [
     title: '打开项目'
   },
   {
+    key: 'openDev',
+    title: '打开控制台'
+  },
+  {
     key: 'setting',
     title: '设置',
     subItem: [
