@@ -4,7 +4,7 @@ import styles from './index.scss';
 import { menusConfig } from '../../configs/settings';
 import WorkspaceModal from '../WorkspaceModal';
 import NewProjectModal from '../NewProjectModal';
-import { ipcRenderer } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import {
   Menu, 
   Dropdown,
@@ -16,8 +16,11 @@ import {
 import {
   WIN_OPEN_DEV,
   WIN_SCAN_PROJECT,
-  WIN_SCAN_PROJECT_REPLY
+  WIN_SCAN_PROJECT_REPLY,
+  WIN_WILL_CLOSE
 } from '../../../app/consts/event';
+import db from '../../../app/utils/db';
+import workdb from '../../../app/utils/workdb';
 const {
   SubMenu
 } = Menu;
@@ -29,15 +32,38 @@ class Setting extends Component{
     this.state = {
       workspaceModal: false,
       newProjectModal: false
+    };
+    this.win = remote.getCurrentWindow();
+  }
+
+  openLastProject = () => {
+    const lastOpenDir = db.get('lastOpenDir').value();
+    const expandedDirKeys = workdb(lastOpenDir).get('expandedDirKeys').value();
+    lastOpenDir && this.onOpenProject(lastOpenDir);
+    if(expandedDirKeys) {
+      this.props.dispatch({
+        type: 'app/updateState',
+        payload: {
+          fields: {
+            expandedDirKeys
+          }
+        }
+       });
     }
   }
 
+  saveProjectDirectory = () => {
+    const { expandedDirKeys = [], appConfig = {} } = this.props;
+    const { lastOpenDir } = appConfig;
+    workdb(lastOpenDir).set('expandedDirKeys', expandedDirKeys).write();
+  }
+
   componentDidMount() {
+    this.openLastProject();
     ipcRenderer.on(WIN_SCAN_PROJECT_REPLY, (e, arg) => {
-      const { data } = arg;
+      const { data, path } = arg;
      if(data && data.length > 0) {
        const dir = data[0].children;
-       console.log(dir)
        this.props.dispatch({
         type: 'app/updateState',
         payload: {
@@ -45,8 +71,12 @@ class Setting extends Component{
             projectDir: dir
           }
         }
-       })
+       });
+       db.set('lastOpenDir', path).write();
      }
+    });
+    ipcRenderer.on(WIN_WILL_CLOSE, () => {
+      this.saveProjectDirectory();
     })
   }
 
@@ -85,8 +115,18 @@ class Setting extends Component{
     ipcRenderer.send(WIN_OPEN_DEV);
   }
 
-  onOpenProject = () => {
-    ipcRenderer.send(WIN_SCAN_PROJECT, {});
+  onOpenProject = async (dir) => {
+    if(dir) {
+      return ipcRenderer.send(WIN_SCAN_PROJECT, { path: dir });
+    }
+    const { dialog } = remote;
+    const { filePaths = [], canceled } = await dialog.showOpenDialog(this.win, {
+      properties: ['openDirectory', 'promptToCreate']
+    })
+    if(canceled) return;
+    if(filePaths.length === 0) return message.error('读取文件夹错误');
+    const path = filePaths[0];
+    ipcRenderer.send(WIN_SCAN_PROJECT, { path });
   }
 
   handleMenuClick = key => {

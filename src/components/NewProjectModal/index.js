@@ -5,7 +5,6 @@ import fs from 'fs';
 import path from 'path';
 import styles from './index.scss';
 import {
-  WIN_UPDATECONFIG,
   WIN_COPY_TEMPLATE,
   WIN_COPY_TEMPLATE_REPLY
 } from '../../../app/consts/event';
@@ -16,6 +15,7 @@ import {
   message,
   Progress
 } from 'antd';
+import db from '../../../app/utils/db';
 
 @connect(({ app }) => app)
 class NewProjectModal extends Component {
@@ -38,9 +38,7 @@ class NewProjectModal extends Component {
         const { dir } = this.state;
         const dirPath = path.join(workspace, dir);
         message.success('创建项目成功');
-        ipcRenderer.send(WIN_UPDATECONFIG, {
-          lastOpenDir: dirPath
-        });
+        db.set('lastOpenDir', dirPath).write();
         onCancel();
       }else {
         message.error(error);

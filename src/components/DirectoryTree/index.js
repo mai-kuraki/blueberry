@@ -16,94 +16,55 @@ const TreeNode = ({
   children,
   deep,
   onExpand,
-  data
+  data,
+  expanded
 }) => {
   const indents = [];
   for(let i = 0; i < deep; i ++) {
     indents.push(<div className={styles.indent}></div>);
   }
-  const { open } = data;
   return (
-    <Fragment>
-      <div className={styles.treeNode} key={data.key} onClick={() => {
+    <Fragment key={data.key}>
+      <div className={styles.treeNode} onClick={() => {
           if(type === 'dir') {
-            onExpand(data, !open);
+            onExpand(data.key, !expanded);
           }
         }}>
         {indents}
-        {type === 'dir' && <div className={styles.treeSwitch}>{open?<CaretDownOutlined/>:<CaretRightOutlined/>}</div>}
+        {type === 'dir' && <div className={styles.treeSwitch}>{expanded?<CaretDownOutlined/>:<CaretRightOutlined/>}</div>}
         {type === 'file' && <div className={styles.indent2}></div>}
         <div className={styles.treeContentWrap}>
           <div className={styles.treeIcon}>{icon}</div>
           <div className={styles.treeTitle}>{title}</div>
         </div>
       </div>
-      {open && children}
+      {expanded && children}
     </Fragment>
   )
 }
 
 const DirctoryTree = ({
   treeData: initData = [],
-  onFileClick = () => {}
+  expandedKeys = [],
+  onFileClick = () => {},
+  onExpand = () => {}
 }) => {
   const [treeData, setTreeData] = useState(initData);
-  const [expandedKeys, setExpandedKeys] = useState([]);
-  
-  useEffect(() => {
-    setDirStatus(null, true)
-  }, []);
 
   useEffect(() => {
-    const newTreeData = mergeDataStatus(_.cloneDeep(initData));
-    setTreeData(newTreeData);
-  }, [initData])
+    setTreeData(_.cloneDeep(initData));
+  }, [initData]);
 
-  const mergeDataStatus = tree => {
-    const loop = (data) => {
-      data.forEach(o => {
-        const { children, key } = o;
-        if(expandedKeys.indexOf(key) > -1) {
-          o.open = true;
-        }
-        if(children) {
-          loop(children);
-        }
-      })
+  const setDirStatus = (key, status) => {
+    let newExpandedKeys = _.cloneDeep(expandedKeys);
+    if(status) {
+      if(newExpandedKeys.indexOf(key) === -1) {
+        newExpandedKeys.push(key);
+      }
+    }else { 
+      newExpandedKeys = newExpandedKeys.filter(o => o!== key);
     }
-    loop(tree);
-    return tree;
-  }
-
-  const setDirStatus = (node, status) => {
-    const newData = _.cloneDeep(treeData);
-    let keys = _.cloneDeep(expandedKeys);
-    const loop = (data) => {
-      data.forEach(o => {
-        const { children } = o;
-        if(node) {
-          const { key } = node;
-          if(o.key === key) {
-            o.open = status;
-          }
-        }else {
-          o.open = status;
-        }
-        if(o.open) {
-          if(keys.indexOf(o.key) === -1) {
-            keys.push(o.key);
-          }
-        }else {
-          keys = _.filter(keys, k => k !== o.key);
-        }
-        if(children) {
-          loop(children);
-        }
-      })
-    }
-    loop(newData);
-    setTreeData(newData);
-    setExpandedKeys(keys);
+    onExpand(newExpandedKeys);
   }
 
   const getTreeNode = (data) => {
@@ -117,6 +78,7 @@ const DirctoryTree = ({
             title={title} 
             key={key} 
             type={type}
+            expanded={inExpanded}
             onExpand={setDirStatus}
             icon={inExpanded?<FolderOpenOutlined/>:<FolderOutlined/>}
             deep={deep}
@@ -129,7 +91,8 @@ const DirctoryTree = ({
           return <TreeNode 
               title={title}
               key={key} 
-              type={type} 
+              type={type}
+              expanded={inExpanded}
               onExpand={setDirStatus}
               icon={inExpanded?<FolderOpenOutlined/>:<FolderOutlined/>}
               deep={deep}

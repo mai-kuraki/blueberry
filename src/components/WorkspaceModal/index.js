@@ -1,16 +1,14 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { remote, ipcRenderer } from 'electron';
+import { remote } from 'electron';
 import styles from './index.scss';
 import {
   Modal,
   Button,
   message
 } from 'antd';
-import {
-  WIN_UPDATECONFIG,
-  WIN_UPDATECONFIG_REPLY
-} from '../../../app/consts/event';
+import store from '../../store';
+import db from '../../../app/utils/db';
 
 @connect(state => state.app)
 class WorkspaceModal extends Component {
@@ -21,21 +19,6 @@ class WorkspaceModal extends Component {
       path: appConfig.workspace || ''
     }
     this.win = remote.getCurrentWindow();
-  }
-
-  componentDidMount() {
-    const { onCancel } = this.props;
-    ipcRenderer.on(WIN_UPDATECONFIG_REPLY, (e, arg) =>{
-      const { error } = arg;
-      if(error) {
-        message.error(error);
-      }
-      onCancel();
-    })
-  }
-
-  componentWillUnmount() {
-    ipcRenderer.removeAllListeners(WIN_UPDATECONFIG_REPLY);
   }
 
   setDirDialog = async () => {
@@ -52,11 +35,14 @@ class WorkspaceModal extends Component {
   }
 
   onOk = () => {
+    const { onCancel } = this.props;
     const { path } = this.state;
     if(!path) return message.warn('请先选择目录');
-    ipcRenderer.send(WIN_UPDATECONFIG, {
-      workspace: path
+    db.set('workspace', path).write();
+    store.dispatch({
+      type: 'app/readAppConfig'
     })
+    onCancel();
   }
 
   render() {

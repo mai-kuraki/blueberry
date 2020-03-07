@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import Logger from '../../../app/utils/logger';
 import _ from 'lodash';
+import db from '../../../app/utils/db';
 
 export default {
   namespace: 'app',
@@ -11,6 +12,7 @@ export default {
       workspace: ''
     },
     projectDir: [],
+    expandedDirKeys: [],
     windows: [
       {
         title: 'mainpage',
@@ -94,25 +96,15 @@ export default {
   },
   effects: {
     *readAppConfig({ put }) {
-      const { __baseDir = '' } = window.config;
-      const configPath = path.join(__baseDir, '/settings/config.json');
-      if(fs.existsSync(configPath)) {
-        const data = fs.readFileSync(configPath);
-        if(data) {
-          const jsonStr = data.toString();
-          try{
-            const appConfig = JSON.parse(jsonStr);
-            yield put({
-              type: 'updateAppConfig',
-              payload: {
-                ...appConfig
-              }
-            })
-          }catch(e) {
-            Logger.error(e);
-          }
+      const workspace = db.get('workspace').value();
+      const lastOpenDir = db.get('lastOpenDir').value();
+      yield put({
+        type: 'updateAppConfig',
+        payload: {
+          workspace,
+          lastOpenDir
         }
-      }
+      })
     }
   }
 }

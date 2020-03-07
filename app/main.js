@@ -4,11 +4,11 @@ const {
   ipcMain 
 } = require('electron');
 const {
-  WIN_UPDATECONFIG,
   WIN_SEND_GLOBALCONFIG,
   WIN_COPY_TEMPLATE,
   WIN_OPEN_DEV,
-  WIN_SCAN_PROJECT
+  WIN_SCAN_PROJECT,
+  WIN_WILL_CLOSE
 } = require('./consts/event');
 const funcs = require('./funcs');
 const addDevToolsExtension = require('./funcs/addDevToolsExtension');
@@ -46,6 +46,7 @@ function createWindow () {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
+  mainWindow.webContents.send(WIN_WILL_CLOSE);
   if (process.platform !== 'darwin') app.quit();
 })
 
@@ -53,7 +54,6 @@ app.on('activate', () => {
   if (mainWindow === null) createWindow();
 })
 
-ipcMain.on(WIN_UPDATECONFIG, funcs.updateConfig);
 ipcMain.on(WIN_COPY_TEMPLATE, funcs.copyTemplate);
 ipcMain.on(WIN_OPEN_DEV, funcs.openDev);
 ipcMain.on(WIN_SCAN_PROJECT, funcs.scanProject);

@@ -17,10 +17,24 @@ module.exports = {
           ext
         });
       }else if(isDir(url)){
+        if(title === '.idea' || title === 'node_modules') return arr;
         const files = fs.readdirSync(url);
-        const children = [];
+        let children = [];
         files.forEach(o => loop(path.join(url, o), children));
-        arr.push({
+        children.sort((a, b) => {
+          const aTitle = a.title.toUpperCase();
+          const bTitle = b.title.toUpperCase();
+          if(a.type === b.type) {
+            if(a.title < b.title) return -1;
+            if(aTitle > bTitle) return 1;
+          }else if(a.type === 'dir') {
+            return -1;
+          }else if(a.type === 'file') {
+            return 1;
+          }
+          return 0;
+        })
+        arr.unshift({
           title,
           key: url,
           type: 'dir',

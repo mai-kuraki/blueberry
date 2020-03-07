@@ -5,26 +5,26 @@ import DirectoryTree from '../../components/DirectoryTree';
 
 @connect(state => state.app)
 class PageManage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      expandedKeys: []
-    }
-  }
-
-  onExpand = expandedKeys => {
-    this.setState({
-      expandedKeys
-    })
+  onExpand = expandedDirKeys => {
+    this.props.dispatch({
+      type: 'app/updateState',
+      payload: {
+        fields: {
+          expandedDirKeys
+        }
+      }
+     });
   }
 
   render() {
-    const { projectDir } = this.props;
+    const { projectDir, expandedDirKeys } = this.props;
     return (
       <div style={{height: '2000px'}}>
         <div className={styles.dirTree}>
           <DirectoryTree
             treeData={projectDir}
+            expandedKeys={expandedDirKeys}
+            onExpand={this.onExpand}
           />
         </div>
       </div>
