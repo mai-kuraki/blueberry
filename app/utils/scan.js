@@ -3,6 +3,11 @@ const path = require('path');
 
 module.exports = {
   do: url => {
+    const ignoreDir = [
+      '.blueberry',
+      'node_modules',
+      '.git'
+    ]
     const isDir = p => fs.statSync(p).isDirectory();
     const isFile = p => fs.statSync(p).isFile();
     const dirs = [];
@@ -17,7 +22,7 @@ module.exports = {
           ext
         });
       }else if(isDir(url)){
-        if(title === '.idea' || title === 'node_modules') return arr;
+        if(ignoreDir.indexOf(title) > -1) return arr;
         const files = fs.readdirSync(url);
         let children = [];
         files.forEach(o => loop(path.join(url, o), children));

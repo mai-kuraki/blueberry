@@ -12,7 +12,6 @@ const {
 } = require('./consts/event');
 const funcs = require('./funcs');
 const addDevToolsExtension = require('./funcs/addDevToolsExtension');
-
 global.config =  {
   __baseDir: __dirname
 }
